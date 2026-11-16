@@ -1236,7 +1236,9 @@ const SITE="https://meow-tarot.com/";
 function siteBase(){return /(meow-tarot\.com|github\.io|pages\.dev)$/.test(location.hostname)?location.origin+location.pathname:SITE}
 const b64e=o=>btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 const b64d=t=>{t=t.replace(/-/g,"+").replace(/_/g,"/");return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(t),c=>c.charCodeAt(0))))};
-function askLink(){return siteBase()+"#m="+b64e({id:ASKID,f:myName(),s:mySoul()})}
+/* short ask link: #m=<ask id>.<soul no>; the asker's name is looked up from the server (asks table). old #m=<base64 json> links still open */
+function askLink(){const n=mySoul();return siteBase()+"#m="+ASKID+(n?"."+n:"")}
+async function lookupAsk(id){try{const r=await sb(`asks?id=eq.${id}&select=name,soul&limit=1`);return r&&r[0]||null}catch{return null}}
 function replyLink(name,n){return siteBase()+"#r="+b64e({to:land.id,f:name,c:n})}
 function saveMe(){store.set("myotarot_me",{name:$("mateName").value.trim(),birth:$("mateBirth").value})}
 function askText(){return `생일 입력해 줘! 우리 둘 소울메이트 궁합 보려고.\n생년월일은 나한테 안 보이고, 소울카드만 와.\n${askLink()}`}
@@ -1298,8 +1300,10 @@ function takeReply(o){
 }
 function readHash(){
   const h=location.hash.slice(1),m=h.match(/^([mr])=(.+)$/);if(!m)return false;
-  let o;try{o=b64d(m[2])}catch{return false}
+  const sh=m[1]==="m"&&m[2].match(/^([a-z0-9]{8,20})(?:\.(\d{1,2}))?$/);
+  let o;if(!sh){try{o=b64d(m[2])}catch{return false}}
   try{history.replaceState(null,"",location.pathname+location.search)}catch{}
+  if(sh){lookupAsk(sh[1]).then(a=>openLanding({id:sh[1],f:(a&&a.name)||"",s:(a&&a.soul)||+sh[2]||0},false));return true}
   if(m[1]==="m")openLanding(o,false);else takeReply(o);return true}
 window.addEventListener("hashchange",readHash);
 $("askClose").addEventListener("click",()=>{$("askLand").hidden=true;renderNet();$("vaultList").scrollIntoView({behavior:"smooth",block:"center"})});
