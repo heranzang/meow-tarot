@@ -258,6 +258,19 @@ details.tp p{font-size:13.5px;color:#E0DACB;margin:8px 0 0}
 .price .btn{width:auto;min-width:120px}
 .test-note{font-size:12px;color:var(--gold-light);background:rgba(217,180,100,.08);border-radius:9px;padding:8px 10px;margin:0}
 .stage{position:relative;display:grid;gap:14px}
+/* reading: board + master + text fit one phone screen */
+#board{scroll-margin-top:62px}
+#board.sp-basic{max-width:252px}
+#board.sp-choice{max-width:186px;gap:6px}
+#board.sp-months,#board.sp-days{max-width:228px;gap:6px}
+.board .tcard.art .lbl{font-size:9px;padding:.3em .2em}
+.board .slot{position:relative}
+.stage .mvoice img{aspect-ratio:auto;height:132px;object-position:50% 9%}
+.stage .mvoice .bubble{margin-top:-26px}
+.board .extra{position:absolute;top:calc(12% + var(--n,0)*8%);left:calc(32% + var(--n,0)*10%);width:100%;z-index:calc(3 + var(--n,0));transform:rotate(7deg);pointer-events:none}
+.board .extra .tcard{box-shadow:-4px 6px 14px rgba(0,0,0,.55);animation:pop .45s ease both}
+.board.reading .extra:not(.focus) .tcard{opacity:.4}
+.board.reading .slot.in.focus .extra .tcard{transform:none}
 .log{border-top:1px solid var(--line);padding-top:10px}
 .log summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--muted)}
 .log .narr{margin-top:10px}
@@ -1095,10 +1108,10 @@ function posText(mk,r,pos){const k=r.spread||"basic",x=rctx(r),c=x.c[pos];
   if(k==="choice"){const T=SPT.choice[mk];return pos===1?T.me(c):pos===6?T.adv(c):pos===2?T.now(x.A,c):pos===4?T.now(x.B,c):T.fut(pos===3?x.A:x.B,c,x.g[pos])}
   return SPT.time[mk].line(x.labels[pos-1],c,x.g[pos])}
 function sumText(mk,r){const k=r.spread||"basic",x=rctx(r);if(k==="basic")return LENS[mk].sum(x.c,r.q);return(k==="choice"?SPT.choice:SPT.time)[mk].sum(x)}
-function posStep(r,pos){const k=r.spread||"basic";if(k==="basic")return cardLabel(r.cards[pos]);const L=k==="choice"?slotLabels(r)[pos-1]:periodLabels(k,r.start)[pos-1];return`${L} · ${cardLabel(r.cards[pos])}`}
+function posStep(r,pos){return cardLabel(r.cards[pos])}
 function spriteFor(mk,r,i){const k=r.spread||"basic",o=SPREADS[k].order;if(k==="basic")return LENS[mk].sp[i];return i===o.length-1?"advice":(i%2?"think":"read")}
 function buildBoard(r){const k=r.spread||"basic",b=$("board"),labels=slotLabels(r);b.className="board sp-"+k;b.replaceChildren();
-  for(let p=1;p<=SPREADS[k].n;p++){const s=el("div","slot p"+p);s.dataset.pos=p;s.append(el("div","tcard"));if(labels[p-1])s.append(el("span","pl",labels[p-1]));b.append(s)}}
+  for(let p=1;p<=SPREADS[k].n;p++){const s=el("div","slot p"+p);s.dataset.pos=p;s.append(el("div","tcard"));b.append(s)}}
 function drawN(n){const pool=Object.keys(tarotData).map(Number),out=[];while(out.length<n){out.push(pool.splice(rand(pool.length),1)[0])}return out}
 function drawFour(){const pool=Object.keys(tarotData).map(Number),out=[];while(out.length<4){const n=pool.splice(rand(pool.length),1)[0];out.push(n)}return out}
 
@@ -1178,11 +1191,11 @@ function show(i){
   $("stageBubble").className="bubble v-"+fr.mk;$("stageStep").textContent=fr.step||"";$("stageStep").hidden=!fr.step;$("stageWho").textContent=MASTERS[fr.mk].ko;$("stageText").textContent=fr.text;
   $("stageNotes").replaceChildren(...(fr.notes||[]).map(t=>el("p","notice",t)));
   document.querySelectorAll(".slot").forEach(s=>s.classList.toggle("focus",+s.dataset.pos===fr.focus));
-  $("board").classList.toggle("reading",!!fr.focus&&!fr.extra);$("extras").classList.toggle("reading",!!fr.extra);
+  $("board").classList.toggle("reading",!!fr.focus);$("extras").classList.toggle("reading",!!fr.extra);
   document.querySelectorAll(".extra").forEach(x=>x.classList.toggle("focus",+x.dataset.i===fr.extra));
   if(fr.end&&fr.mk===reading.master&&!reading.saved){reading.saved=true;saveMine();track("counsel_complete",{master:reading.master,public:reading.pub});toast(reading.pub?"상담 게시판에 익명으로 올라갔어요":"내 상담에 저장했어요 · 비공개")}
   renderNav();
-  if(i>0)$("stageVoice").scrollIntoView({behavior:"smooth",block:"start"});
+  if(i>0)$("board").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function renderNav(){
   const box=$("stageActions");if(dealing){box.replaceChildren();return}
@@ -1242,10 +1255,10 @@ async function drawExtra(fq,pos){
   dealing=true;renderNav();
   document.querySelectorAll(".slot").forEach(s=>s.classList.toggle("focus",+s.dataset.pos===pos));
   setSprite("think",mk);await sleep(700);
-  const ex=el("div","extra");ex.dataset.i=k;const c=el("div");drawCard(c,n);ex.append(c,el("b","",`이어서 묻기 ${k}`));
-  $("extras").hidden=false;$("extras").append(ex);
+  const slot=document.querySelector(`.slot[data-pos="${pos}"]`),onSlot=slot.querySelectorAll(".extra").length;
+  const ex=el("div","extra");ex.dataset.i=k;ex.style.setProperty("--n",onSlot);const c=el("div");drawCard(c,n);ex.append(c);slot.append(ex);
   await sleep(500);dealing=false;
-  frames.push({mk,sp:"read",step:`이어서 묻기 ${k} · ${(reading.spread&&reading.spread!=="basic")?slotLabels(reading)[pos-1]+"에 보충 · ":""}${cardLabel(n)}`,text:FOLLOW[mk](fq,o,x),focus:pos,extra:k,end:true});
+  frames.push({mk,sp:"read",step:`이어서 묻기 · ${cardLabel(n)}`,text:FOLLOW[mk](fq,o,x),focus:pos,extra:k,end:true});
   show(frames.length-1);reading.extras[reading.extras.length-1].text=FOLLOW[mk](fq,o,x);saveMine();
 }
 /* ---------- reading board ---------- */
