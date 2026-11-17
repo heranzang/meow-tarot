@@ -265,8 +265,9 @@ details.tp p{font-size:13.5px;color:#E0DACB;margin:8px 0 0}
 #board.sp-months,#board.sp-days{max-width:228px;gap:6px}
 .board .tcard.art .lbl{font-size:9px;padding:.3em .2em}
 .board .slot{position:relative}
-.stage .mvoice img{aspect-ratio:auto;height:132px;object-position:50% 9%}
-.stage .mvoice .bubble{margin-top:-26px}
+.stage .mvoice{grid-template-columns:104px minmax(0,1fr);align-items:end;gap:8px;margin-inline:-8px}
+.stage .mvoice img{width:104px;height:auto;aspect-ratio:3/5;object-fit:cover;object-position:50% 0;border-radius:14px;align-self:stretch;min-height:180px}
+.stage .mvoice .bubble{margin:0;align-self:stretch}
 .board .extra{position:absolute;top:calc(12% + var(--n,0)*8%);left:calc(32% + var(--n,0)*10%);width:100%;z-index:calc(3 + var(--n,0));transform:rotate(7deg);pointer-events:none}
 .board .extra .tcard{box-shadow:-4px 6px 14px rgba(0,0,0,.55);animation:pop .45s ease both}
 .board.reading .extra:not(.focus) .tcard{opacity:.4}
