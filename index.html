@@ -384,6 +384,13 @@ details.tp p{font-size:13.5px;color:#E0DACB;margin:8px 0 0}
 .promo-h{font-size:21px;line-height:1.4}
 .promo-h em{font-style:normal;color:var(--gold-light);font-size:26px}
 .promo-sub{margin:0;font-size:13.5px;color:#D8D1C2}
+.promo-rules{font-size:13px;color:#D8D1C2}
+.promo-rules summary{cursor:pointer;color:var(--gold-light);font-weight:700;text-align:center;list-style:none}
+.promo-rules summary::-webkit-details-marker{display:none}
+.promo-rules summary::after{content:" ▾"}
+.promo-rules[open] summary::after{content:" ▴"}
+.promo-rules ul{margin:10px 0 0;padding-left:18px;display:grid;gap:6px;line-height:1.55}
+.promo-rules b{color:var(--ivory)}
 .dots{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .dots span{aspect-ratio:1;border-radius:50%;border:1.5px dashed rgba(217,180,100,.55);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--muted);background:rgba(11,11,13,.4)}
 .dots span.on{border:1.5px solid var(--gold);background:var(--gold);color:#1A140A}
@@ -550,6 +557,22 @@ details.tp,.summary{border-top:0}
       <div class="btn-row"><button class="btn btn-gold" type="button" id="askShare">친구에게 생일 물어보기</button><button class="btn btn-ghost" type="button" id="askPreview">친구 화면 미리보기</button></div>
       <p class="hint">친구가 링크를 열어 생일을 입력하면 아래 랭킹에 자동으로 들어와요. 친구의 생년월일은 나에게 보이지 않고 소울카드만 와요. 랭킹에서 이름을 누르면 둘의 궁합을 볼 수 있어요.</p>
     </div>
+    <div class="promo" id="promo">
+      <span class="promo-tag">공유 이벤트</span>
+      <h3 class="promo-h">친구 5명이 생일을 입력하면<br><em>990원 고민 상담 1회 무료</em></h3>
+      <p class="promo-sub" id="promoSub">친구에게 생일을 물어보고, 친구 5명이 내 링크에서 생일을 입력하면 고민 상담 무료 쿠폰을 드려요.</p>
+      <div class="dots" id="promoDots" role="img"></div>
+      <p class="promo-count" id="netCount"></p>
+      <button class="btn btn-gold" type="button" id="promoShare">친구에게 생일 물어보기</button>
+      <details class="promo-rules"><summary>이벤트 기준</summary><ul>
+        <li>친구가 내 링크를 열고 <b>생일까지 입력해야</b> 1명으로 세요. 보내기만 한 건 세지 않아요.</li>
+        <li><b>한 기기는 1명</b>이에요. 같은 기기에서 이름이나 생일을 바꿔 여러 번 입력해도 1명이에요.</li>
+        <li>한 번 세어진 친구는 <b>다음 회차에 다시 세지 않아요.</b></li>
+        <li>5명이 모이면 무료 쿠폰 1장. <b>쿠폰을 쓴 뒤부터</b> 다음 회차를 세요. 쿠폰을 쓰기 전에 들어온 친구는 세지 않아요.</li>
+        <li>무료 상담은 <b>하루 1번</b>까지예요.</li>
+        <li>미리보기와 내 링크에 내가 직접 입력한 것은 세지 않아요.</li>
+      </ul></details>
+    </div>
     <div class="panel" id="pairResult" hidden>
       <div class="pair-title"><h3>다른 색의 한 페이지</h3><small id="pairNames"></small></div>
       <div class="pair-cards"><div class="tcard" id="pairA"></div><div class="join" aria-hidden="true">✦</div><div class="tcard" id="pairB"></div></div>
@@ -629,14 +652,6 @@ details.tp,.summary{border-top:0}
       <p class="hint">같은 질문 안에서 <b style="color:var(--gold-light)">다른 마스터로 다시 보기</b>와 <b style="color:var(--gold-light)">추가 질문</b>은 각 500원이에요. 완전히 새로운 질문은 990원부터 다시 시작해요.</p>
       <p class="test-note">프로토타입이라 실제 결제는 일어나지 않아요. 버튼을 누르면 결제가 끝난 것으로 처리돼요.</p>
       <p class="err" id="deepError"></p>
-    </div>
-    <div class="promo" id="promo">
-      <span class="promo-tag">공유 이벤트</span>
-      <h3 class="promo-h">친구 5명에게 공유하면<br><em>990원 고민 상담 1회 무료</em></h3>
-      <p class="promo-sub" id="promoSub">내 링크로 친구 5명이 소울 카드 궁합을 확인하면, 고민 상담 1회를 무료로 드려요.</p>
-      <div class="dots" id="promoDots" role="img"></div>
-      <p class="promo-count" id="netCount"></p>
-      <button class="btn btn-gold" type="button" id="promoShare">내 링크 공유하고 무료 상담 받기</button>
     </div>
     <div id="safetyBox" hidden></div>
     <div class="panel stage" id="stage" hidden>
@@ -950,8 +965,8 @@ $("copyDaily").addEventListener("click",()=>{if(!state.daily)return;const c=taro
 /* ---------- deep reading ---------- */
 const PRICE_BASE=990,PRICE_ADD=500;
 const won=n=>n.toLocaleString("ko-KR")+"원";
-let paid=false,reading=null;
-function renderPrice(){$("priceNow").textContent=won(PRICE_BASE);$("payButton").textContent=paid?"카드 뽑기":"테스트 결제"}
+let paid=false,paidFree=false,reading=null;
+function renderPrice(){let f=paid&&paidFree;try{if(!paid)f=freeToday()}catch{}$("priceNow").textContent=f?"0원":won(PRICE_BASE);$("priceLabel").textContent=f?"무료 쿠폰 사용 · 카드 4장 + 종합 해석":"고민 상담 1회 · 카드 4장 + 종합 해석";$("payButton").textContent=paid?"카드 뽑기":f?"무료 쿠폰으로 상담":"테스트 결제"}
 renderPrice();
 document.querySelectorAll("#topics button").forEach(b=>b.addEventListener("click",()=>document.querySelectorAll("#topics button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))));
 const qc=()=>$("qCount").textContent=`${$("deepQuestion").value.length} / 300자`;$("deepQuestion").addEventListener("input",qc);qc();
@@ -1015,11 +1030,12 @@ $("payButton").addEventListener("click",async()=>{
   if(CRISIS.test(q)){crisisView();return}
   if(HEALTH.test(q)){paid=false;renderPrice();healthView();return}
   $("safetyBox").hidden=true;
-  if(!paid){paid=true;renderPrice();track("counsel_pay",{value:990,currency:"KRW",test_payment:true});toast(`테스트 결제 완료 · ${won(PRICE_BASE)}`);return}
+  if(!paid&&freeToday()){useCoupon();paid=true;paidFree=true;renderPrice();toast("무료 쿠폰을 사용했어요");return}
+  if(!paid){paid=true;paidFree=false;renderPrice();track("counsel_pay",{value:990,currency:"KRW",test_payment:true});toast(`테스트 결제 완료 · ${won(PRICE_BASE)}`);return}
   startReading(q);
 });
 async function startReading(q){track("counsel_start",{master});
-  paid=false;renderPrice();$("payButton").disabled=true;
+  paid=false;paidFree=false;renderPrice();$("payButton").disabled=true;
   const draw=drawFour(),cards={1:draw[0],2:draw[1],3:draw[2],4:draw[3]};
   reading={id:Date.now().toString(36),q,cards,master,current:master,switched:[],used:new Set(draw),extras:[],saved:false,topic:(document.querySelector("#topics [aria-pressed=true]")||{}).textContent||"",pub:$("pubCheck").checked};
   frames=framesFor(master,false);
@@ -1195,15 +1211,27 @@ function renderNet(){
   if(!list.length)svg.push(`<text x="${cx}" y="340" text-anchor="middle" font-size="12" fill="#8A8475">생일을 보내 준 친구가 여기에 나타나요</text>`);
   $("netMap").innerHTML=svg.join("");
   /* share promo */
-  const real=all.length,got=Math.min(real,GOAL);
+  const E=ev(),got=E.coupon?GOAL:Math.min(E.round.length,GOAL),real=got;
   $("promoDots").replaceChildren(...Array.from({length:GOAL},(_,i)=>el("span",i<got?"on":"",i<got?"✓":String(i+1))));
   $("promoDots").setAttribute("aria-label",`친구 ${got}명 / ${GOAL}명`);
   $("promo").classList.toggle("done",real>=GOAL);
-  $("netCount").textContent=real>=GOAL?"990원 고민 상담 무료 쿠폰을 받았어요!":`${GOAL-got}명만 더 확인하면 무료 상담을 받아요`;
-  $("promoShare").textContent=real>=GOAL?"무료 상담 받으러 가기":"내 링크 공유하고 무료 상담 받기";
+  $("netCount").textContent=E.coupon?(E.lastFree===today()?"무료 쿠폰이 있어요. 오늘은 이미 무료 상담을 받아서 내일부터 쓸 수 있어요":"고민 상담 무료 쿠폰을 받았어요!"):`친구 ${GOAL-got}명만 더 생일을 입력하면 무료 상담을 받아요`;
+  $("promoShare").textContent=E.coupon?"무료 상담 받으러 가기":"친구에게 생일 물어보기";
 }
 function inviteText(){return askText()}
-$("promoShare").addEventListener("click",()=>{if(friends.length>=GOAL){showView("deep");toast("무료 쿠폰은 정식 서비스에서 결제 단계에 적용돼요");return}copyText(inviteText())});
+/* share event: 5 distinct friend devices who entered a birthday via my link = 1 free counsel coupon.
+   a device counts once, ever. the next round only starts after the coupon is used; answers before that are not counted. free counsel max once a day. */
+const EKEY="myotarot_event";
+function ev(){return Object.assign({counted:[],round:[],since:"1970-01-01T00:00:00Z",coupon:false,lastFree:""},store.get(EKEY,{}))}
+function evalEvent(rows){const e=ev();if(e.coupon)return;const since=Date.parse(e.since);let changed=false;
+  for(const r of rows){if(Date.parse(r.created_at)<=since)continue;const k=r.device||("n:"+r.name);
+    if(k===ASKID||e.counted.includes(k)||e.round.includes(k))continue;e.round.push(k);changed=true;
+    if(e.round.length>=GOAL){e.coupon=true;e.counted.push(...e.round);track("event_coupon_earned");break}}
+  if(changed){store.set(EKEY,e);renderNet();renderPrice();if(e.coupon)toast("친구 5명이 모였어요! 고민 상담 무료 쿠폰을 받았어요")}}
+function freeToday(){const e=ev();return e.coupon&&e.lastFree!==today()}
+function useCoupon(){const e=ev();e.coupon=false;e.lastFree=today();e.round=[];e.since=new Date().toISOString();store.set(EKEY,e);track("event_coupon_used");renderNet()}
+renderPrice();
+$("promoShare").addEventListener("click",()=>{if(ev().coupon){showView("deep");$("payButton").scrollIntoView({behavior:"smooth",block:"center"});return}$("askShare").click()});
 document.querySelector('.tab[data-view="compat"]').addEventListener("click",()=>{renderNet();pullAnswers(false)});
 
 /* ---------- birthday request (생일 물어보기) ---------- */
@@ -1221,10 +1249,11 @@ async function syncAsk(){const name=myName(),soul=mySoul();if(!name||!soul)retur
 let pulling=false;
 async function pullAnswers(silent){
   if(pulling)return;pulling=true;
-  try{const rows=await sb(`answers?ask_id=eq.${ASKID}&select=name,soul,created_at&order=created_at.asc&limit=500`)||[];
+  try{const rows=await sb(`answers?ask_id=eq.${ASKID}&select=name,soul,device,created_at&order=created_at.asc&limit=500`)||[];
     const seen=new Set(store.get("myotarot_seen",[]));const fresh=[];
     rows.forEach(r=>{const key=r.name+"|"+r.soul+"|"+r.created_at;if(seen.has(key))return;seen.add(key);fresh.push(r);
       friends=friends.filter(f=>f.name!==r.name);friends.unshift({name:r.name,n:r.soul})});
+    evalEvent(rows);
     if(fresh.length){track("mate_arrived",{count:fresh.length});store.set(NKEY,friends);store.set("myotarot_seen",[...seen].slice(-800));renderNet();
       if(!silent)toast(fresh.length===1?`${fresh[0].name}님이 소울메이트 랭킹에 들어왔어요`:`${fresh.length}명이 소울메이트 랭킹에 들어왔어요`)}
   }catch{}finally{pulling=false}}
@@ -1267,7 +1296,7 @@ $("askSubmit").addEventListener("click",async()=>{
   $("askErr").textContent="";
   let sent=false;
   if(!land.preview&&land.id){$("askSubmit").disabled=true;$("askSubmit").textContent="보내는 중…";
-    try{await sb("answers",{method:"POST",body:{ask_id:land.id,name:name.slice(0,12),soul:n},prefer:"return=minimal"});sent=true}catch{}
+    try{await sb("answers",{method:"POST",body:{ask_id:land.id,name:name.slice(0,12),soul:n,device:ASKID},prefer:"return=minimal"});sent=true}catch{}
     $("askSubmit").disabled=false;$("askSubmit").textContent="생일 보내고 결과 보기"}
   /* preview: the answer lands in this same browser. real link: the friend keeps the asker as their own mate and sends a reply link back */
   if(land.preview){friends=friends.filter(f=>f.name!==name);friends.unshift({name,n});store.set(NKEY,friends)}
