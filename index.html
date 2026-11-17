@@ -666,7 +666,7 @@ details.tp,.summary{border-top:0}
         <div><span class="amt" id="priceNow">990원</span><small id="priceLabel">고민 상담 1회 · 카드 4장 + 종합 해석</small></div>
         <button class="btn btn-gold" type="button" id="payButton">테스트 결제</button>
       </div>
-      <p class="hint">같은 질문 안에서 <b style="color:var(--gold-light)">다른 마스터로 다시 보기</b>와 <b style="color:var(--gold-light)">추가 질문</b>은 각 500원이에요. 완전히 새로운 질문은 990원부터 다시 시작해요.</p>
+      <p class="hint">같은 질문 안에서 <b style="color:var(--gold-light)">다른 마스터로 다시 보기</b>는 무료(최대 2번), <b style="color:var(--gold-light)">추가 질문</b>은 990원이에요. 완전히 새로운 질문도 990원으로 시작해요.</p>
       <p class="test-note">프로토타입이라 실제 결제는 일어나지 않아요. 버튼을 누르면 결제가 끝난 것으로 처리돼요.</p>
       <p class="err" id="deepError"></p>
     </div>
@@ -980,7 +980,7 @@ $("dailyButton").addEventListener("click",runDaily);
 $("copyDaily").addEventListener("click",()=>{if(!state.daily)return;const c=tarotData[state.daily];copyText(`Meow Tarot 오늘의 운세\n${c.name}\n${c.daily}\n${c.ask}`)});
 
 /* ---------- deep reading ---------- */
-const PRICE_BASE=990,PRICE_ADD=500;
+const PRICE_BASE=990,PRICE_ADD=990;
 const won=n=>n.toLocaleString("ko-KR")+"원";
 let paid=false,paidFree=false,reading=null;
 function renderPrice(){let f=paid&&paidFree;try{if(!paid)f=freeToday()}catch{}$("priceNow").textContent=f?"0원":won(PRICE_BASE);$("priceLabel").textContent=f?"무료 쿠폰 사용 · 카드 4장 + 종합 해석":"고민 상담 1회 · 카드 4장 + 종합 해석";$("payButton").textContent=paid?"카드 뽑기":f?"무료 쿠폰으로 상담":"테스트 결제"}
@@ -1194,12 +1194,12 @@ function renderNav(){
   if(atEnd&&frames[fi].end){$("fuBox").hidden=true;items.push(...actionButtons())}
   box.replaceChildren(...items);
 }
-/* add-ons within the same question: 500원 each */
+/* add-ons within the same question: switching master is free (max 2, one per other master); follow-up question 990원 */
 function actionButtons(){
   const mk=reading.current;
   const fu=el("button","btn btn-gold",`추가 질문하기 · ${won(PRICE_ADD)}`);fu.type="button";fu.addEventListener("click",openFollowUp);
   const others=Object.keys(MASTERS).filter(k=>k!==mk&&k!==reading.master&&!reading.switched.includes(k));
-  const acts=others.map(k=>{const b=el("button","btn btn-ghost",`${MASTERS[k].ko}${k==="rion"?"으로":"로"} 다시 보기 · ${won(PRICE_ADD)}`);b.type="button";b.addEventListener("click",()=>{reading.switched.push(k);toast(`테스트 결제 완료 · ${won(PRICE_ADD)}`);track("counsel_addon",{type:"switch_master",value:500,currency:"KRW"});$("fuBox").hidden=true;const start=frames.length;frames.push(...framesFor(k,true));show(start)});return b});
+  const acts=others.map(k=>{const b=el("button","btn btn-ghost",`${MASTERS[k].ko}${k==="rion"?"으로":"로"} 다시 보기 · 무료`);b.type="button";b.addEventListener("click",()=>{reading.switched.push(k);track("counsel_addon",{type:"switch_master",value:0,currency:"KRW"});$("fuBox").hidden=true;const start=frames.length;frames.push(...framesFor(k,true));show(start)});return b});
   const again=el("button","btn btn-quiet",`새 질문하기 · ${won(PRICE_BASE)}`);again.type="button";again.addEventListener("click",()=>{$("stage").hidden=true;$("fuBox").hidden=true;$("deepQuestion").value="";qc();$("deepQuestion").focus();window.scrollTo({top:0,behavior:"smooth"});toast("새로운 고민은 990원 상담으로 시작해요")});
   return [fu,...acts,again];
 }
@@ -1222,7 +1222,7 @@ function openFollowUp(){
     const fq=$("fuQ").value.trim();if(fq.length<4){$("fuErr").textContent="추가 질문을 4자 이상 적어 주세요.";return}
     if(CRISIS.test(fq)){crisisView();return}
     if(HEALTH.test(fq)){$("fuErr").textContent="건강·질병에 관한 질문은 타로로 보지 않아요. 의료진과 상담해 주세요.";return}
-    $("fuErr").textContent="";toast(`테스트 결제 완료 · ${won(PRICE_ADD)}`);track("counsel_addon",{type:"follow_up",value:500,currency:"KRW"});box.hidden=true;drawExtra(fq,pos);
+    $("fuErr").textContent="";toast(`테스트 결제 완료 · ${won(PRICE_ADD)}`);track("counsel_addon",{type:"follow_up",value:PRICE_ADD,currency:"KRW"});box.hidden=true;drawExtra(fq,pos);
   });
   $("fuQ").focus();box.scrollIntoView({behavior:"smooth",block:"center"});
 }
