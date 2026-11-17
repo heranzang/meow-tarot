@@ -569,22 +569,6 @@ details.tp,.summary{border-top:0}
       <div class="btn-row"><button class="btn btn-gold" type="button" id="askShare">친구에게 생일 물어보기</button><button class="btn btn-ghost" type="button" id="askPreview">친구 화면 미리보기</button></div>
       <p class="hint">친구가 링크를 열어 생일을 입력하면 아래 랭킹에 자동으로 들어와요. 친구의 생년월일은 나에게 보이지 않고 소울카드만 와요. 랭킹에서 이름을 누르면 둘의 궁합을 볼 수 있어요.</p>
     </div>
-    <div class="promo" id="promo">
-      <span class="promo-tag">공유 이벤트</span>
-      <h3 class="promo-h">친구 5명이 생일을 입력하면<br><em>990원 고민 상담 1회 무료</em></h3>
-      <p class="promo-sub" id="promoSub">친구에게 생일을 물어보고, 친구 5명이 내 링크에서 생일을 입력하면 고민 상담 무료 쿠폰을 드려요.</p>
-      <div class="dots" id="promoDots" role="img"></div>
-      <p class="promo-count" id="netCount"></p>
-      <button class="btn btn-gold" type="button" id="promoShare">친구에게 생일 물어보기</button>
-      <details class="promo-rules"><summary>이벤트 기준</summary><ul>
-        <li>친구가 내 링크를 열고 <b>생일까지 입력해야</b> 1명으로 세요. 보내기만 한 건 세지 않아요.</li>
-        <li><b>한 기기는 1명</b>이에요. 같은 기기에서 이름이나 생일을 바꿔 여러 번 입력해도 1명이에요.</li>
-        <li>한 번 세어진 친구는 <b>다음 회차에 다시 세지 않아요.</b></li>
-        <li>5명이 모이면 무료 쿠폰 1장. <b>쿠폰을 쓴 뒤부터</b> 다음 회차를 세요. 쿠폰을 쓰기 전에 들어온 친구는 세지 않아요.</li>
-        <li>무료 상담은 <b>하루 1번</b>까지예요.</li>
-        <li>미리보기와 내 링크에 내가 직접 입력한 것은 세지 않아요.</li>
-      </ul></details>
-    </div>
     <div class="panel" id="pairResult" hidden>
       <div class="pair-title"><h3>다른 색의 한 페이지</h3><small id="pairNames"></small></div>
       <div class="pair-cards"><div class="tcard" id="pairA"></div><div class="join" aria-hidden="true">✦</div><div class="tcard" id="pairB"></div></div>
@@ -594,10 +578,6 @@ details.tp,.summary{border-top:0}
         <div><dt>조율해 볼 방향</dt><dd id="pairAdvice"></dd></div>
       </dl>
       <div class="score"><div><b id="pairNick"></b><small>상징 조화 점수 · 놀이용 지표</small></div><div class="pts" id="pairScore"></div></div>
-    </div>
-    <div class="panel">
-      <div class="vault-head"><h3 id="vaultTitle">소울메이트 랭킹</h3><span class="hint" id="rankNote">상위 21명까지 보여요</span></div>
-      <ol class="vault-list" id="vaultList"></ol>
     </div>
   <!-- NETWORK -->
   <div id="netWrap" style="display:grid;gap:18px;margin-top:28px">
@@ -611,6 +591,26 @@ details.tp,.summary{border-top:0}
       <p class="hint" style="text-align:center">가까운 원일수록, 선이 굵고 밝을수록 궁합 점수가 높아요.</p>
     </div>
   </div>
+    <div class="panel">
+      <div class="vault-head"><h3 id="vaultTitle">소울메이트 랭킹</h3><span class="hint" id="rankNote">상위 21명까지 보여요</span></div>
+      <ol class="vault-list" id="vaultList"></ol>
+    </div>
+    <div class="promo" id="promo">
+      <span class="promo-tag">공유 이벤트</span>
+      <h3 class="promo-h">친구 5명이 생일을 입력하면<br><em>고민 상담 1회 무료</em></h3>
+      <p class="promo-sub" id="promoSub">친구에게 생일을 물어보고, 친구 5명이 내 링크에서 생일을 입력하면 고민 상담 무료 쿠폰을 드려요.</p>
+      <div class="dots" id="promoDots" role="img"></div>
+      <p class="promo-count" id="netCount"></p>
+      <button class="btn btn-gold" type="button" id="promoShare">친구에게 생일 물어보기</button>
+      <details class="promo-rules"><summary>이벤트 기준</summary><ul>
+        <li>친구가 내 링크를 열고 <b>생일까지 입력해야</b> 1명으로 세요. 보내기만 한 건 세지 않아요.</li>
+        <li><b>한 기기는 1명</b>이에요. 같은 기기에서 이름이나 생일을 바꿔 여러 번 입력해도 1명이에요.</li>
+        <li>한 번 세어진 친구는 <b>다음 회차에 다시 세지 않아요.</b></li>
+        <li>5명이 모이면 무료 쿠폰 1장. <b>쿠폰을 쓴 뒤부터</b> 다음 회차를 세요. 쿠폰을 쓰기 전에 들어온 친구는 세지 않아요.</li>
+        <li>무료 상담은 <b>하루 1번</b>까지예요.</li>
+        <li>미리보기와 내 링크에 내가 직접 입력한 것은 세지 않아요.</li>
+      </ul></details>
+    </div>
   </section>
 
   <!-- DAILY -->
@@ -652,18 +652,19 @@ details.tp,.summary{border-top:0}
     </div>
     <section class="minfo" id="masterInfo" aria-live="polite"></section>
     <div class="panel" id="deepForm">
-      <div class="topics" role="group" aria-label="고민 주제" id="topics">
-        <button type="button" aria-pressed="false">관계</button><button type="button" aria-pressed="false">커리어</button><button type="button" aria-pressed="false">선택</button><button type="button" aria-pressed="false">앞으로의 흐름</button>
+      <div class="field"><span class="spread-lbl">고민 주제 <small>고르지 않아도 돼요</small></span>
+      <div class="topics" role="group" aria-label="고민 주제 (선택 사항)" id="topics">
+        <button type="button" aria-pressed="false">관계</button><button type="button" aria-pressed="false">미래</button><button type="button" aria-pressed="false">선택</button>
+      </div></div>
+      <div class="field"><label for="deepQuestion">지금 가장 궁금한 고민</label><textarea class="input" id="deepQuestion" maxlength="300" placeholder="고민은 자유롭게, 가능한 한 구체적으로 적어 주세요. 예를 들어 누구와, 어떤 상황인지 적어 주면 더 정확하게 볼 수 있어요."></textarea><span class="hint" id="qCount"></span><span class="hint">건강·질병에 관한 고민은 타로로 보지 않아요. 몸과 건강에 관한 고민은 의료진과 상담해 주세요.</span><span class="hint">타로는 너무 먼 미래를 보기 어려워요. 가까운 시기의 일을 물어봐 주세요.</span><span class="hint">상담 결과는 참고로만 봐 주세요. 누구에게나 스스로의 선택과 의지로 미래를 바꿀 수 있는 힘이 있어요.</span></div>
+      <div class="field" id="spreadBox"><span class="spread-lbl" hidden>상담 방식 <small id="spreadAuto"></small></span>
+        <div class="topics" id="spreadPick" role="group" aria-label="상담 방식" hidden><button type="button" data-sp="basic" aria-pressed="true">기본 · 4장</button><button type="button" data-sp="choice" aria-pressed="false">양자택일 · 6장</button><button type="button" data-sp="months" aria-pressed="false">시기 6개월 · 6장</button><button type="button" data-sp="days" aria-pressed="false">가까운 시기 7일 · 7장</button></div>
+        <span class="hint" id="spreadHint" hidden></span>
+        <div class="opt-ab" id="optAB" hidden><span class="spread-lbl" style="grid-column:1/-1">어떤 두 가지 중에서 고민하나요?</span><input class="input" id="optA" maxlength="12" placeholder="첫 번째 선택" aria-label="첫 번째 선택지"><span>vs</span><input class="input" id="optB" maxlength="12" placeholder="두 번째 선택" aria-label="두 번째 선택지"></div>
       </div>
-      <div class="field"><label for="deepQuestion">지금 가장 궁금한 고민</label><textarea class="input" id="deepQuestion" maxlength="300" placeholder="고민을 자유롭게 적어 주세요."></textarea><span class="hint" id="qCount"></span><span class="hint">건강·질병에 관한 고민은 타로로 보지 않아요. 몸과 건강에 관한 고민은 의료진과 상담해 주세요.</span></div>
-      <div class="field" id="spreadBox"><span class="spread-lbl">상담 방식 <small id="spreadAuto">고민 내용을 보고 골랐어요. 바꿔도 돼요.</small></span>
-        <div class="topics" id="spreadPick" role="group" aria-label="상담 방식"><button type="button" data-sp="basic" aria-pressed="true">기본 · 4장</button><button type="button" data-sp="choice" aria-pressed="false">양자택일 · 6장</button><button type="button" data-sp="months" aria-pressed="false">시기 6개월 · 6장</button><button type="button" data-sp="days" aria-pressed="false">가까운 시기 7일 · 7장</button></div>
-        <span class="hint" id="spreadHint"></span>
-        <div class="opt-ab" id="optAB" hidden><input class="input" id="optA" maxlength="12" placeholder="첫 번째 선택" aria-label="첫 번째 선택지"><span>vs</span><input class="input" id="optB" maxlength="12" placeholder="두 번째 선택" aria-label="두 번째 선택지"></div>
-      </div>
-      <label class="pubswitch"><input type="checkbox" id="pubCheck" checked><span class="sw" aria-hidden="true"></span><span class="pubtxt"><b id="pubTitle">상담 게시판에 공개 · 켜짐</b><small id="pubSub">상담이 끝나면 닉네임 없이 익명으로 게시판에 올라가요. 공개를 원하지 않으면 스위치를 꺼 주세요.</small></span></label>
+      <label class="pubswitch"><input type="checkbox" id="pubCheck" checked><span class="sw" aria-hidden="true"></span><span class="pubtxt"><b id="pubTitle">상담 게시판에 공개</b><small id="pubSub">상담이 끝나면 닉네임 없이 익명으로 게시판에 올라가요. 공개를 원하지 않으면 스위치를 꺼 주세요.</small></span></label>
       <div class="price">
-        <div><span class="amt" id="priceNow">990원</span><small id="priceLabel">고민 상담 1회 · 카드 4장 + 종합 해석</small></div>
+        <div><span class="amt" id="priceNow">990원</span><small id="priceLabel">고민 상담 1회</small></div>
         <button class="btn btn-gold" type="button" id="payButton">테스트 결제</button>
       </div>
       <p class="hint">같은 질문 안에서 <b style="color:var(--gold-light)">다른 마스터로 다시 보기</b>는 무료(최대 2번), <b style="color:var(--gold-light)">추가 질문</b>은 990원이에요. 완전히 새로운 질문도 990원으로 시작해요.</p>
@@ -983,9 +984,9 @@ $("copyDaily").addEventListener("click",()=>{if(!state.daily)return;const c=taro
 const PRICE_BASE=990,PRICE_ADD=990;
 const won=n=>n.toLocaleString("ko-KR")+"원";
 let paid=false,paidFree=false,reading=null;
-function renderPrice(){let f=paid&&paidFree;try{if(!paid)f=freeToday()}catch{}$("priceNow").textContent=f?"0원":won(PRICE_BASE);$("priceLabel").textContent=f?"무료 쿠폰 사용 · 카드 4장 + 종합 해석":"고민 상담 1회 · 카드 4장 + 종합 해석";$("payButton").textContent=paid?"카드 뽑기":f?"무료 쿠폰으로 상담":"테스트 결제"}
+function renderPrice(){let f=paid&&paidFree;try{if(!paid)f=freeToday()}catch{}$("priceNow").textContent=f?"0원":won(PRICE_BASE);$("priceLabel").textContent=f?"무료 쿠폰 사용":"고민 상담 1회";$("payButton").textContent=paid?"카드 뽑기":f?"무료 쿠폰으로 상담":"테스트 결제"}
 renderPrice();
-document.querySelectorAll("#topics button").forEach(b=>b.addEventListener("click",()=>document.querySelectorAll("#topics button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))));
+document.querySelectorAll("#topics button").forEach(b=>b.addEventListener("click",()=>{const on=b.getAttribute("aria-pressed")!=="true";document.querySelectorAll("#topics button").forEach(x=>x.setAttribute("aria-pressed",String(on&&x===b)))}));
 const qc=()=>$("qCount").textContent=`${$("deepQuestion").value.length} / 300자`;$("deepQuestion").addEventListener("input",qc);qc();
 
 const CRISIS=/자살|죽고\s*싶|죽을\s*까|죽어\s*버|자해|극단적|목숨|사라지고\s*싶|살기\s*싫/;
@@ -1034,11 +1035,11 @@ function extractAB(q){
   return r.every(x=>x.length>=2)?r:["",""]}
 let spread="basic",spreadTouched=false,abTouched=false;
 function setSpread(k){spread=k;document.querySelectorAll("#spreadPick button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.sp===k)));
-  $("spreadHint").textContent=SPREADS[k].hint;$("optAB").hidden=k!=="choice";
+  $("optAB").hidden=k!=="choice";$("spreadBox").hidden=k!=="choice";
   if(k==="choice"&&!abTouched){const [a,b]=extractAB($("deepQuestion").value);if(a&&b){$("optA").value=a;$("optB").value=b}}}
 document.querySelectorAll("#spreadPick button").forEach(b=>b.addEventListener("click",()=>{spreadTouched=true;$("spreadAuto").textContent="직접 고른 방식이에요.";setSpread(b.dataset.sp)}));
 ["optA","optB"].forEach(id=>$(id).addEventListener("input",()=>{abTouched=true}));
-$("deepQuestion").addEventListener("input",()=>{const v=$("deepQuestion").value;if(!v.trim()){spreadTouched=false;abTouched=false;$("optA").value="";$("optB").value="";$("spreadAuto").textContent="고민 내용을 보고 골랐어요. 바꿔도 돼요."}
+$("deepQuestion").addEventListener("input",()=>{const v=$("deepQuestion").value;if(!v.trim()){spreadTouched=false;abTouched=false;$("optA").value="";$("optB").value=""}
   if(!spreadTouched)setSpread(guessSpread(v));else if(spread==="choice"&&!abTouched)setSpread("choice")});
 setSpread("basic");
 function periodLabels(k,start){const d=new Date(start),out=[],W="일월화수목금토";
@@ -1245,14 +1246,14 @@ async function drawExtra(fq,pos){
   show(frames.length-1);reading.extras[reading.extras.length-1].text=FOLLOW[mk](fq,o,x);saveMine();
 }
 /* ---------- reading board ---------- */
-function renderPub(){const on=$("pubCheck").checked;$("pubTitle").textContent=on?"상담 게시판에 공개 · 켜짐":"나만 보기 · 공개 꺼짐";$("pubSub").textContent=on?"상담이 끝나면 닉네임 없이 익명으로 게시판에 올라가요. 공개를 원하지 않으면 스위치를 꺼 주세요.":"게시판에 올라가지 않고 내 상담에만 남아요. 나중에 내 상담에서 공개로 바꿀 수 있어요."}
+function renderPub(){const on=$("pubCheck").checked;$("pubTitle").textContent=on?"상담 게시판에 공개":"나만 보기";$("pubSub").textContent=on?"상담이 끝나면 닉네임 없이 익명으로 게시판에 올라가요. 공개를 원하지 않으면 스위치를 꺼 주세요.":"게시판에 올라가지 않고 내 상담에만 남아요. 나중에 내 상담에서 공개로 바꿀 수 있어요."}
 $("pubCheck").addEventListener("change",renderPub);
 const BKEY="myotarot_board_v1";
 const SEED=[
   {id:"s1",topic:"관계",m:"rion",q:"3년 된 친구와 사소한 일로 연락이 끊겼어요. 먼저 연락해도 될까요?",cards:{1:3,2:7,3:14,4:18},ago:2},
-  {id:"s2",topic:"커리어",m:"noel",q:"지금 회사에 남을지, 이직을 준비할지 고민이에요.",cards:{1:5,2:12,3:21,4:9},ago:5},
+  {id:"s2",topic:"선택",m:"noel",q:"지금 회사에 남을지, 이직을 준비할지 고민이에요.",cards:{1:5,2:12,3:21,4:9},ago:5},
   {id:"s3",topic:"선택",m:"haku",q:"올겨울에 혼자 긴 여행을 떠나도 괜찮을까?",cards:{1:1,2:20,3:10,4:17},ago:26},
-  {id:"s4",topic:"앞으로의 흐름",m:"noel",q:"올해 남은 두 달, 어떤 마음으로 보내면 좋을까요?",cards:{1:8,2:2,3:19,4:11},ago:50}
+  {id:"s4",topic:"미래",m:"noel",q:"올해 남은 두 달, 어떤 마음으로 보내면 좋을까요?",cards:{1:8,2:2,3:19,4:11},ago:50}
 ].map(p=>({...p,pub:true,extras:[],t:Date.now()-p.ago*3600e3}));
 let bTab="all",bFilter="";
 function saveMine(){
