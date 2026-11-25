@@ -908,7 +908,7 @@ function cardArt(n){return CARD_ART[n]||(n%2?"card-hierophant":"card-fool")}
 function drawCard(el,n){const c=tarotData[n];el.className="tcard art";el.innerHTML=`<img src="${A(cardArt(n))}" alt="" loading="lazy"><span class="lbl"><b>${roman[n]}</b>${c.name}</span>`;el.setAttribute("role","img");el.setAttribute("aria-label",`${roman[n]} ${c.name} 카드`)}
 
 /* ---------- soul ---------- */
-const state={soul:null,daily:null,pair:null,team:null};
+const state={soul:null,daily:null,dailySoul:null,pair:null,team:null};
 /* 22 cards slide by slowly; on input the strip eases to a stop on the soul card */
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ring={cards:[],off:0,speed:0,last:0,anim:null,W:280,S:296};
@@ -993,10 +993,16 @@ $("mateBirth").addEventListener("input",()=>{const b=$("mateBirth"),s=digits(b.v
 
 /* ---------- daily ---------- */
 function seeded(seed){let h=2166136261;for(const ch of seed){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return(h>>>0)%22+1}
-function runDaily(){const b=$("dailyBirth").value;if(!soulOf(b)){$("dailyError").textContent="생년월일 8자리를 확인해 주세요.";return}$("dailyError").textContent="";state.daily=seeded(today()+":"+digits(b));renderDaily();$("dailyResult").hidden=false}
-function renderDaily(){track("daily_view",{card:state.daily});const n=state.daily,c=tarotData[n],t=today();drawCard($("dailyCard"),n);$("dailyCard").classList.add("big");$("dailyDate").textContent=`${+t.slice(4,6)}월 ${+t.slice(6)}일의 카드 · ${roman[n]} ${c.name}`;setVoice($("dailySprite"),$("dailyBubble"),master,"offer");$("dailyWho").textContent=M().ko;$("dailyVoice").textContent=dailyVoice[master](c)}
+/* daily lines: today's card (1–22) × soul card (1–22) × master, from 묘타로_스토리문구 '오늘의 운세' */
+let DAILY=null,dailyLoad=null;
+function loadDaily(){if(DAILY)return Promise.resolve(DAILY);if(!dailyLoad)dailyLoad=fetch("data/daily.json").then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}).then(d=>DAILY=d).catch(e=>{dailyLoad=null;throw e});return dailyLoad}
+function dailyLine(mk,n,s){return DAILY&&DAILY[mk]&&DAILY[mk][n-1]&&DAILY[mk][n-1][s-1]||null}
+function runDaily(){const b=$("dailyBirth").value,s=soulOf(b);if(!s){$("dailyError").textContent="생년월일 8자리를 확인해 주세요.";return}$("dailyError").textContent="";state.daily=seeded(today()+":"+digits(b));state.dailySoul=s;
+  const btn=$("dailyButton");btn.disabled=true;
+  loadDaily().catch(()=>null).then(()=>{btn.disabled=false;renderDaily();$("dailyResult").hidden=false})}
+function renderDaily(){track("daily_view",{card:state.daily});const n=state.daily,c=tarotData[n],t=today();drawCard($("dailyCard"),n);$("dailyCard").classList.add("big");$("dailyDate").textContent=`${+t.slice(4,6)}월 ${+t.slice(6)}일의 카드 · ${roman[n]} ${c.name}`;setVoice($("dailySprite"),$("dailyBubble"),master,"offer");$("dailyWho").textContent=M().ko;$("dailyVoice").textContent=dailyLine(master,n,state.dailySoul)||dailyVoice[master](c)}
 $("dailyButton").addEventListener("click",runDaily);
-$("copyDaily").addEventListener("click",()=>{if(!state.daily)return;const c=tarotData[state.daily];copyText(`Meow Tarot 오늘의 운세\n${c.name}\n${c.daily}\n${c.ask}`)});
+$("copyDaily").addEventListener("click",()=>{if(!state.daily)return;const c=tarotData[state.daily],ln=dailyLine(master,state.daily,state.dailySoul);copyText(ln?`Meow Tarot 오늘의 운세\n${c.name}\n${M().ko}: ${ln}`:`Meow Tarot 오늘의 운세\n${c.name}\n${c.daily}\n${c.ask}`)});
 
 /* ---------- deep reading ---------- */
 const PRICE_BASE=990,PRICE_ADD=500;
